@@ -25,7 +25,10 @@ export default function Home() {
         );
       }
 
-      setResult(data.result);
+      setResult(`This arduino code ${data.result.choices[0].text}`);
+
+      console.log(data.result);
+
       setCodeInput("");
     } catch (error) {
       // Consider implementing your own error handling logic here
@@ -54,7 +57,7 @@ export default function Home() {
           />
           <button type="submit">Submit</button>
         </form>
-        <div className={styles.result}>{result}</div>
+        <p>{result}</p>
       </main>
     </div>
   );

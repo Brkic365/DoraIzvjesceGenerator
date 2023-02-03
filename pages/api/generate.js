@@ -26,10 +26,12 @@ export default async function (req, res) {
     return;
   }
 
+  const prompt = `${code}""" \nThis arduino code `;
+
   try {
     const response = await openai.createCompletion({
       model: "code-davinci-002",
-      prompt: `${code}""" \nThis arduino code`,
+      prompt: prompt,
       temperature: 0,
       max_tokens: 64,
       top_p: 1.0,
@@ -38,7 +40,7 @@ export default async function (req, res) {
       stop: ['"""'],
     });
 
-    res.status(200).json({ result: response });
+    res.status(200).json({ result: response.data });
   } catch (error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -53,17 +55,4 @@ export default async function (req, res) {
       });
     }
   }
-}
-
-function generatePrompt(animal) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
-
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
 }
