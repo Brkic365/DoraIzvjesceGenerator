@@ -1,9 +1,9 @@
 import Head from "next/head";
 import { useState } from "react";
-import styles from "./index.module.css";
+import styles from "../styles/Home.module.scss";
 
 export default function Home() {
-  const [animalInput, setAnimalInput] = useState("");
+  const [codeInput, setCodeInput] = useState("");
   const [result, setResult] = useState();
 
   async function onSubmit(event) {
@@ -14,17 +14,20 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ animal: animalInput }),
+        body: JSON.stringify({ code: codeInput }),
       });
 
       const data = await response.json();
       if (response.status !== 200) {
-        throw data.error || new Error(`Request failed with status ${response.status}`);
+        throw (
+          data.error ||
+          new Error(`Request failed with status ${response.status}`)
+        );
       }
 
       setResult(data.result);
-      setAnimalInput("");
-    } catch(error) {
+      setCodeInput("");
+    } catch (error) {
       // Consider implementing your own error handling logic here
       console.error(error);
       alert(error.message);
@@ -34,22 +37,22 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>OpenAI Quickstart</title>
+        <title>Dora Izvjesce Generator</title>
         <link rel="icon" href="/dog.png" />
       </Head>
 
       <main className={styles.main}>
-        <img src="/dog.png" className={styles.icon} />
-        <h3>Name my pet</h3>
+        <h3>Input code</h3>
         <form onSubmit={onSubmit}>
-          <input
+          <textarea
             type="text"
-            name="animal"
-            placeholder="Enter an animal"
-            value={animalInput}
-            onChange={(e) => setAnimalInput(e.target.value)}
+            name="code"
+            rows="30"
+            placeholder="Enter arduino code..."
+            value={codeInput}
+            onChange={(e) => setCodeInput(e.target.value)}
           />
-          <input type="submit" value="Generate names" />
+          <button type="submit">Submit</button>
         </form>
         <div className={styles.result}>{result}</div>
       </main>
